@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Pages{% endblock %}
+
+{% block extra_css %}
+<style>
+	.table td,
+	.table th {
+		vertical-align: middle;
+	}
+
+	.col-page-id {
+		width: 140px;
+	}
+
+	.col-name {
+		width: 200px;
+	}
+
+	.col-category {
+		width: 150px;
+	}
+
+	.col-token {
+		width: 300px;
+		max-width: 300px;
+	}
+
+	.col-action {
+		width: 100px;
+	}
+
+	.token-content {
+		max-height: 2.4em;
+		/* Khoảng 2 dòng */
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+	}
+
+	.col-expires {
+		width: 120px;
+	}
+
+	.col-account-id {
+		width: 120px;
+	}
+
+	.copy-btn {
+		padding: 2px 8px;
+		font-size: 0.8em;
+		margin-left: 5px;
+	}
+
+	.token-wrapper {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	/* Responsive: Đảm bảo bảng có thể cuộn ngang trên các màn hình nhỏ */
+	@media (max-width: 768px) {
+		.table-responsive {
+			overflow-x: auto;
+		}
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">List of Pages</h1>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<thead class="table-dark">
+			<tr>
+				<th class="col-page-id">Page ID</th>
+				<th class="col-name">Page Name</th>
+				<th class="col-category">Category</th>
+				<th class="col-action">Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% if pages|length == 0 %}
+			<tr>
+				<td colspan="4" class="text-center">No pages have been added yet</td>
+			</tr>
+			{% else %}
+			{% for page in pages %}
+			<tr>
+				<td class="col-page-id">{{ page.page_id }}</td>
+				<td class="col-name">{{ page.name }}</td>
+				<td class="col-category">{{ page.category }}</td>
+				<td>
+					<a href="{{ url_for('facebook.list_posts', page_id=page.page_id) }}" class="btn btn-primary btn-sm">
+						View Posts
+					</a>
+				</td>
+			</tr>
+			{% endfor %}
+			{% endif %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+
+{% endblock %}

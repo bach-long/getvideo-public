@@ -1,0 +1,26 @@
+services:
+  flask-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5000"
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+      - DATABASE_URI=mysql+pymysql://${USER_DB}:${PASSWORD_DB}@db:3306/${NAME_DB}
+      - SECRET_KEY=${SECRET_KEY}
+    command: >
+      bash -c "
+        flask db upgrade &&
+        flask run --host=0.0.0.0 --port=5000
+      "
+    networks:
+        - shared-net
+    volumes:
+      - .:/app  # Gắn kết mã nguồn từ host vào container
+      - /app/__pycache__  # Tránh lưu cache bên trong container
+
+networks:
+  shared-net:
+    external: true
