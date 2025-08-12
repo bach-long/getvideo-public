@@ -125,37 +125,37 @@ def create_app():
     return app
 
 
-if __name__ == "__main__":
-    app = create_app()
-    # Flask-Migrate sẽ tự động xử lý migrations
+# if __name__ == "__main__":
+app = create_app()
+# Flask-Migrate sẽ tự động xử lý migrations
 
-    with app.app_context():
-        from sqlalchemy import inspect
+with app.app_context():
+    from sqlalchemy import inspect
 
-        # Import models để SQLAlchemy biết bảng (nếu bạn dùng db.create_all() khi thiếu)
-        from models.category_playlist import CategoryPlaylist
-        from models.category import Category
-        from models.facebook_account import FacebookAccount
-        from models.history import History
-        from models.page import Page
-        from models.playlist import Playlist
-        from models.stack_post import StackPost
-        from models.video_category import VideoCategory
-        from models.video_split_category import VideoSplitCategory
-        from models.video_split import VideoSplit
-        from models.video import Video
-        from models.facebook_ad_account import FacebookAdAccount
+    # Import models để SQLAlchemy biết bảng (nếu bạn dùng db.create_all() khi thiếu)
+    from models.category_playlist import CategoryPlaylist
+    from models.category import Category
+    from models.facebook_account import FacebookAccount
+    from models.history import History
+    from models.page import Page
+    from models.playlist import Playlist
+    from models.stack_post import StackPost
+    from models.video_category import VideoCategory
+    from models.video_split_category import VideoSplitCategory
+    from models.video_split import VideoSplit
+    from models.video import Video
+    from models.facebook_ad_account import FacebookAdAccount
 
-        inspector = inspect(db.engine)
-        existing_tables = inspector.get_table_names()
-        # TODO: thay danh sách này bằng cách tự động duyệt db.Model nếu muốn
-        required_tables = ["user", "product"]
-        missing_tables = [t for t in required_tables if t not in existing_tables]
-        if missing_tables:
-            print(f"Creating missing tables: {missing_tables}")
-            db.create_all()
-        else:
-            print("All required tables already exist. Skipping db.create_all().")
+    inspector = inspect(db.engine)
+    existing_tables = inspector.get_table_names()
+    # TODO: thay danh sách này bằng cách tự động duyệt db.Model nếu muốn
+    required_tables = ["user", "product"]
+    missing_tables = [t for t in required_tables if t not in existing_tables]
+    if missing_tables:
+        print(f"Creating missing tables: {missing_tables}")
+        db.create_all()
+    else:
+        print("All required tables already exist. Skipping db.create_all().")
 
     # Gợi ý: bind rõ host/port để khớp Cloudflare Tunnel (127.0.0.1:5000)
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    # app.run(host="127.0.0.1", port=5000, debug=True)
