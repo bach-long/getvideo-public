@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   flask-app:
     build:
@@ -15,12 +17,32 @@ services:
         flask db upgrade &&
         flask run --host=0.0.0.0 --port=5000
       "
-    networks:
-        - shared-net
+    depends_on:
+      db:
+        condition: service_healthy
     volumes:
       - .:/app  # Gắn kết mã nguồn từ host vào container
       - /app/__pycache__  # Tránh lưu cache bên trong container
 
-networks:
-  shared-net:
-    external: true
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${PASSWORD_DB}
+      MYSQL_DATABASE: ${NAME_DB}
+      MYSQL_USER: ${USER_DB}
+      MYSQL_PASSWORD: ${PASSWORD_DB}
+    expose:
+      - 3306
+    volumes:
+      - /tmp/app/mysqld:/run/mysqld
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    
+
+volumes:
+  db_data:
