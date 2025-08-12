@@ -55,7 +55,7 @@ def login():
             session["facebook_user_id"] = account.id
 
             # Gửi yêu cầu gen token cho tool
-            api = f"https://tool-deploy.bmappp.com/appinfo/update"
+            api = f"https://tool-deploy.bmappp.com/deployed_app/appinfo/update"
             postData = {
                 "shortLivedUserToken": access_token,
                 "appId": os.getenv('APP_ID'),
@@ -66,7 +66,8 @@ def login():
                 data = response.json()  # Parse JSON thành dict
             except ValueError:
                 data = {}
-
+            
+            print(data)
             if data.get("status") == "success":
                 flash("Gen token thành công")
             else:
