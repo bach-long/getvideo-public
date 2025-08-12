@@ -62,12 +62,11 @@ def login():
                 "appSecret": os.getenv('APP_SECRET')
             }
             response = requests.post(api, json=postData, timeout=10)
+            print(response)
             try:
                 data = response.json()  # Parse JSON thành dict
             except ValueError:
                 data = {}
-            
-            print(data)
             if data.get("status") == "success":
                 flash("Gen token thành công")
             else:
